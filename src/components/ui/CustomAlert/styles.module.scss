@@ -1,0 +1,208 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: scale(0.9) translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 90%;
+  max-height: 80vh;
+  overflow: hidden;
+  animation: slideIn 0.3s ease-out;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 24px 16px 24px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.icon {
+  font-size: 24px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.success .icon {
+  background: #e8f5e8;
+}
+
+.error .icon {
+  background: #ffebee;
+}
+
+.warning .icon {
+  background: #fff3e0;
+}
+
+.info .icon {
+  background: #e3f2fd;
+}
+
+.confirm .icon {
+  background: #f3e5f5;
+}
+
+.title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c3e50;
+  flex: 1;
+}
+
+.content {
+  padding: 16px 24px 24px 24px;
+}
+
+.message {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #5a6c7d;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  padding: 0 24px 24px 24px;
+  justify-content: flex-end;
+}
+
+.button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 80px;
+}
+
+.cancelButton {
+  background: #f8f9fa;
+  color: #6c757d;
+  border: 1px solid #e9ecef;
+}
+
+.cancelButton:hover {
+  background: #e9ecef;
+  color: #495057;
+}
+
+.confirmButton {
+  color: white;
+}
+
+.successButton {
+  background: #27ae60;
+}
+
+.successButton:hover {
+  background: #219a52;
+}
+
+.errorButton {
+  background: #e74c3c;
+}
+
+.errorButton:hover {
+  background: #c0392b;
+}
+
+.warningButton {
+  background: #f39c12;
+}
+
+.warningButton:hover {
+  background: #d68910;
+}
+
+.infoButton {
+  background: #3498db;
+}
+
+.infoButton:hover {
+  background: #2980b9;
+}
+
+.confirmButton {
+  background: #8e44ad;
+}
+
+.confirmButton:hover {
+  background: #7d3c98;
+}
+
+@media (max-width: 480px) {
+  .modal {
+    margin: 20px;
+    width: calc(100% - 40px);
+  }
+  
+  .header {
+    padding: 20px 20px 12px 20px;
+  }
+  
+  .content {
+    padding: 12px 20px 20px 20px;
+  }
+  
+  .actions {
+    padding: 0 20px 20px 20px;
+    flex-direction: column-reverse;
+  }
+  
+  .button {
+    width: 100%;
+  }
+  
+  .title {
+    font-size: 16px;
+  }
+  
+  .message {
+    font-size: 16px;
+  }
+}

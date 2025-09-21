@@ -1,0 +1,1099 @@
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.8s ease-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.mobileContainer {
+  animation: none !important;
+}
+
+.mobileContainer * {
+  animation: none !important;
+  transition: none !important;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Animação de círculos no fundo */
+.backgroundCircles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(2px);
+  animation: floatCircle var(--duration) ease-in-out infinite;
+  animation-delay: var(--delay);
+}
+
+.circle:nth-child(1) {
+  width: 120px;
+  height: 120px;
+  top: 10%;
+  left: 15%;
+  --duration: 20s;
+  --delay: 0s;
+}
+
+.circle:nth-child(2) {
+  width: 80px;
+  height: 80px;
+  top: 60%;
+  left: 80%;
+  --duration: 25s;
+  --delay: -5s;
+}
+
+.circle:nth-child(3) {
+  width: 150px;
+  height: 150px;
+  top: 30%;
+  left: 70%;
+  --duration: 30s;
+  --delay: -10s;
+}
+
+.circle:nth-child(4) {
+  width: 60px;
+  height: 60px;
+  top: 80%;
+  left: 20%;
+  --duration: 18s;
+  --delay: -8s;
+}
+
+.circle:nth-child(5) {
+  width: 100px;
+  height: 100px;
+  top: 15%;
+  left: 85%;
+  --duration: 22s;
+  --delay: -12s;
+}
+
+.circle:nth-child(6) {
+  width: 90px;
+  height: 90px;
+  top: 70%;
+  left: 5%;
+  --duration: 28s;
+  --delay: -15s;
+}
+
+@keyframes floatCircle {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px) scale(1);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translateY(-20px) translateX(10px) scale(1.1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-10px) translateX(-15px) scale(0.9);
+    opacity: 0.2;
+  }
+  75% {
+    transform: translateY(-30px) translateX(5px) scale(1.05);
+    opacity: 0.4;
+  }
+}
+
+.inviteCard {
+  max-width: 520px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.15),
+    0 8px 32px rgba(102, 126, 234, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  overflow: hidden;
+  position: relative;
+  z-index: 10;
+  animation: slideInUp 0.6s ease-out 0.2s both;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(30px) scale(0.98);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.inviteHeader {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 40px 32px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.inviteHeader::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.inviteTitle {
+  font-size: 2em;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  animation: bounceIn 0.8s ease-out 0.4s both;
+  letter-spacing: -0.02em;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.guestName {
+  font-size: 1.2em;
+  font-weight: 500;
+  margin: 0;
+  opacity: 0.95;
+  animation: slideInLeft 0.6s ease-out 0.6s both;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 0.9;
+  }
+}
+
+.inviteContent {
+  padding: 40px 32px;
+}
+
+.descriptionSection {
+  background: linear-gradient(135deg, rgba(248, 249, 250, 0.8) 0%, rgba(233, 236, 239, 0.8) 100%);
+  backdrop-filter: blur(10px);
+  padding: 24px;
+  border-radius: 16px;
+  margin: 24px 0;
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  border-left: 4px solid #667eea;
+  animation: fadeInUp 0.6s ease-out 1.2s both;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.08);
+}
+
+.descriptionText {
+  color: #2c3e50;
+  line-height: 1.6;
+  margin: 0;
+  font-size: 1.05em;
+  font-weight: 400;
+  text-align: center;
+}
+
+.eventInfo {
+  margin-bottom: 24px;
+  animation: fadeInUp 0.6s ease-out 0.8s both;
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translateY(15px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.eventName {
+  font-size: 1.5em;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 12px 0;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.eventDescription {
+  color: #5a6c7d;
+  font-size: 1em;
+  line-height: 1.5;
+  margin: 0 0 16px 0;
+  text-align: center;
+}
+
+.eventDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.eventDetail {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 3px solid #667eea;
+  transition: all 0.2s ease;
+}
+
+.eventDetail:hover {
+  background: #e9ecef;
+  transform: translateX(2px);
+}
+
+.eventDetail span:first-child {
+  font-size: 1.1em;
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.eventDetail span:last-child {
+  color: #2c3e50;
+  font-weight: 500;
+  font-size: 0.95em;
+}
+
+.photoGallery {
+  margin: 24px 0;
+  animation: fadeInUp 0.6s ease-out 1s both;
+}
+
+.photoContainer {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  background: #f8f9fa;
+  aspect-ratio: 16/10;
+}
+
+.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.photoNavigation {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.9);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  color: #2c3e50;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+}
+
+.photoNavigation:hover {
+  background: rgba(255,255,255,1);
+  transform: translateY(-50%) scale(1.05);
+}
+
+.prevButton {
+  left: 12px;
+}
+
+.nextButton {
+  right: 12px;
+}
+
+.photoIndicators {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.photoIndicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ddd;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.photoIndicator.active {
+  background: #667eea;
+  transform: scale(1.3);
+}
+
+.messageSection {
+  background: linear-gradient(135deg, rgba(248, 249, 250, 0.9) 0%, rgba(233, 236, 239, 0.9) 100%);
+  backdrop-filter: blur(10px);
+  padding: 24px;
+  border-radius: 16px;
+  margin: 24px 0;
+  border: 1px solid rgba(40, 167, 69, 0.2);
+  border-left: 4px solid #28a745;
+  animation: fadeInUp 0.6s ease-out 1.2s both;
+  box-shadow: 0 4px 16px rgba(40, 167, 69, 0.08);
+}
+
+.messageTitle {
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0 0 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.messageText {
+  color: #2c3e50;
+  line-height: 1.6;
+  margin: 0;
+  font-style: italic;
+  font-size: 1.05em;
+  font-weight: 500;
+  text-align: center;
+}
+
+.eventDetailsContainer {
+  margin: 32px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: fadeInUp 0.6s ease-out 1.4s both;
+}
+
+.detailItem {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(248, 249, 250, 0.8) 0%, rgba(233, 236, 239, 0.8) 100%);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 1px solid rgba(102, 126, 234, 0.15);
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 12px rgba(102, 126, 234, 0.05);
+}
+
+.detailItem:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.12);
+  border-color: rgba(102, 126, 234, 0.25);
+}
+
+.detailIcon {
+  font-size: 1.5em;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.detailLabel {
+  font-size: 0.9em;
+  font-weight: 600;
+  color: #667eea;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.detailValue {
+  color: #2c3e50;
+  font-weight: 500;
+  font-size: 1.05em;
+  line-height: 1.4;
+}
+
+.photoSection {
+  margin: 32px 0;
+  animation: fadeInUp 0.6s ease-out 1.6s both;
+}
+
+.photoContainer {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  background: #f8f9fa;
+  aspect-ratio: 16/10;
+}
+
+.photoImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.photoControls {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  color: #2c3e50;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.photoControls:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.prevButton {
+  left: 16px;
+}
+
+.nextButton {
+  right: 16px;
+}
+
+.photoNavigation {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.photoDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(102, 126, 234, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.photoDot.active {
+  background: #667eea;
+  transform: scale(1.4);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+}
+
+.confirmationSection {
+  margin: 40px 0;
+  padding: 32px;
+  background: linear-gradient(135deg, rgba(248, 249, 250, 0.9) 0%, rgba(233, 236, 239, 0.9) 100%);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  animation: fadeInUp 0.6s ease-out 1.8s both;
+  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.1);
+}
+
+.confirmationTitle {
+  font-size: 1.4em;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 24px 0;
+  text-align: center;
+}
+
+.confirmationForm {
+  margin-bottom: 32px;
+}
+
+.peopleCountSection {
+  text-align: center;
+}
+
+.peopleCountLabel {
+  display: block;
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 16px;
+}
+
+.peopleCountControls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 16px 0;
+}
+
+.peopleCountButton {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+}
+
+.peopleCountButton:hover:not(:disabled) {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.peopleCountButton:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.peopleCountInput {
+  font-size: 1.3em;
+  font-weight: 700;
+  color: #2c3e50;
+  background: white;
+  border: 2px solid #667eea;
+  border-radius: 12px;
+  width: 80px;
+  height: 50px;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.1);
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.confirmButton {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 25px;
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+  min-width: 180px;
+}
+
+.confirmButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+}
+
+.confirmButton:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.declineButton {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 25px;
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(220, 53, 69, 0.3);
+  min-width: 180px;
+}
+
+.declineButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(220, 53, 69, 0.4);
+}
+
+.declineButton:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.successMessage {
+  text-align: center;
+  padding: 40px 32px;
+  background: linear-gradient(135deg, rgba(212, 237, 218, 0.9) 0%, rgba(195, 230, 203, 0.9) 100%);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  border: 1px solid rgba(40, 167, 69, 0.3);
+  margin: 32px 0;
+  animation: fadeInUp 0.6s ease-out 2s both;
+  box-shadow: 0 8px 32px rgba(40, 167, 69, 0.15);
+}
+
+.successIcon {
+  font-size: 3em;
+  margin-bottom: 16px;
+  animation: bounce 1s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+.successTitle {
+  font-size: 1.5em;
+  font-weight: 700;
+  color: #155724;
+  margin: 0 0 16px 0;
+}
+
+.successMessage p {
+  color: #155724;
+  font-size: 1.1em;
+  margin: 8px 0;
+  font-weight: 500;
+}
+
+.declinedMessage {
+  text-align: center;
+  padding: 40px 32px;
+  background: linear-gradient(135deg, rgba(248, 215, 218, 0.9) 0%, rgba(241, 176, 183, 0.9) 100%);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  border: 1px solid rgba(220, 53, 69, 0.3);
+  margin: 32px 0;
+  animation: fadeInUp 0.6s ease-out 2s both;
+  box-shadow: 0 8px 32px rgba(220, 53, 69, 0.15);
+}
+
+.declinedIcon {
+  font-size: 3em;
+  margin-bottom: 16px;
+  animation: shake 1s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-5px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(5px);
+  }
+}
+
+.declinedTitle {
+  font-size: 1.5em;
+  font-weight: 700;
+  color: #721c24;
+  margin: 0 0 16px 0;
+}
+
+.declinedMessage p {
+  color: #721c24;
+  font-size: 1.1em;
+  margin: 8px 0;
+  font-weight: 500;
+}
+
+.changeResponseButton {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 20px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 16px;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+}
+
+.changeResponseButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.rsvpSection {
+  text-align: center;
+  padding: 24px 0 16px 0;
+  animation: fadeInUp 0.6s ease-out 1.4s both;
+}
+
+.rsvpTitle {
+  font-size: 1.2em;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0 0 20px 0;
+}
+
+.confirmedMessage {
+  background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+  color: #155724;
+  padding: 16px;
+  border-radius: 8px;
+  margin: 16px 0;
+  border-left: 3px solid #28a745;
+  font-size: 0.95em;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.01);
+  }
+}
+
+.declinedMessage {
+  background: linear-gradient(135deg, #f8d7da 0%, #f1b0b7 100%);
+  color: #721c24;
+  padding: 16px;
+  border-radius: 8px;
+  margin: 16px 0;
+  border-left: 3px solid #dc3545;
+  font-size: 0.95em;
+}
+
+.peopleSelector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 16px 0;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.peopleButton {
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.peopleButton:hover:not(:disabled) {
+  background: #5a6fd8;
+  transform: scale(1.05);
+}
+
+.peopleButton:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.peopleCount {
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #2c3e50;
+  min-width: 50px;
+  text-align: center;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.confirmButton {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 20px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.25);
+  min-width: 120px;
+}
+
+.confirmButton:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.confirmButton:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.declineButton {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 20px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.25);
+  min-width: 120px;
+}
+
+.declineButton:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+.declineButton:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.errorMessage {
+  background: linear-gradient(135deg, #f8d7da 0%, #f1b0b7 100%);
+  color: #721c24;
+  padding: 32px;
+  border-radius: 12px;
+  text-align: center;
+  margin: 20px;
+  border-left: 3px solid #dc3545;
+  font-size: 1em;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .container {
+    padding: 12px;
+  }
+  
+  .inviteCard {
+    border-radius: 20px;
+    max-width: 100%;
+  }
+  
+  .inviteHeader {
+    padding: 32px 24px;
+  }
+  
+  .inviteTitle {
+    font-size: 1.7em;
+  }
+  
+  .guestName {
+    font-size: 1.1em;
+  }
+  
+  .inviteContent {
+    padding: 32px 24px;
+  }
+  
+  .circle {
+    display: none;
+  }
+  
+  .confirmationSection {
+    padding: 24px;
+    margin: 32px 0;
+  }
+  
+  .buttonGroup {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .confirmButton, .declineButton {
+    width: 100%;
+    max-width: 280px;
+  }
+  
+  .eventName {
+    font-size: 1.3em;
+  }
+  
+  .eventDescription {
+    font-size: 0.95em;
+  }
+  
+  .actionButtons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .confirmButton, .declineButton {
+    width: 100%;
+    max-width: 200px;
+  }
+  
+  .eventDetail {
+    padding: 10px 14px;
+  }
+  
+  .eventDetail span:last-child {
+    font-size: 0.9em;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 8px;
+  }
+  
+  .inviteCard {
+    border-radius: 16px;
+  }
+  
+  .inviteHeader {
+    padding: 24px 20px;
+  }
+  
+  .inviteTitle {
+    font-size: 1.5em;
+  }
+  
+  .inviteContent {
+    padding: 24px 20px;
+  }
+  
+  .confirmationSection {
+    padding: 20px;
+  }
+  
+  .successMessage, .declinedMessage {
+    padding: 32px 24px;
+  }
+  
+  .eventName {
+    font-size: 1.2em;
+  }
+  
+  .photoNavigation {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+  
+  .prevButton {
+    left: 8px;
+  }
+  
+  .nextButton {
+    right: 8px;
+  }
+  
+  .peopleSelector {
+    padding: 12px;
+  }
+  
+  .peopleButton {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+  
+  .confirmButton, .declineButton {
+    padding: 10px 20px;
+    font-size: 0.95em;
+  }
+}

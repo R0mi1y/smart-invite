@@ -1,0 +1,472 @@
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #8fa4ea 0%, #9d6bc2 100%);
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+  background: white;
+  padding: 20px 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.backButton {
+  background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.backButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(108, 117, 125, 0.4);
+}
+
+.header h1 {
+  margin: 0;
+  color: #333;
+  font-size: 2em;
+}
+
+.eventInfo {
+  background: white;
+  padding: 25px 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.eventInfo h2 {
+  margin: 0 0 15px 0;
+  color: #333;
+}
+
+.eventDetails {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.eventDetails p {
+  margin: 0;
+  color: #666;
+  font-weight: 500;
+}
+
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.createSection {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.createSection h3 {
+  margin: 0 0 20px 0;
+  color: #333;
+}
+
+.createForm {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.nameInput {
+  flex: 1;
+  min-width: 250px;
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.nameInput:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.createButton {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.createButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+}
+
+.createButton:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.errorMessage {
+  background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+  color: #f44336;
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border-left: 4px solid #f44336;
+}
+
+.successMessage {
+  background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+  color: #4CAF50;
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border-left: 4px solid #4CAF50;
+}
+
+.guestsSection {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.guestsSection h3 {
+  margin: 0 0 25px 0;
+  color: #333;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.guestsList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.guestCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  background: #f8f9fa;
+}
+
+.guestCard:hover {
+  border-color: #667eea;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+}
+
+.guestInfo {
+  flex: 1;
+}
+
+.guestInfo h4 {
+  margin: 0 0 8px 0;
+  color: #333;
+  font-size: 1.1em;
+}
+
+.guestStatus {
+  margin: 0 0 5px 0;
+  font-weight: 500;
+}
+
+.guestStatus.confirmed {
+  color: #4CAF50;
+}
+
+.guestStatus.pending {
+  color: #ff9800;
+}
+
+.guestDate {
+  margin: 0;
+  font-size: 12px;
+  color: #999;
+}
+
+.guestActions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.copyButton {
+  background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.copyButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(33, 150, 243, 0.4);
+}
+
+.deleteButton {
+  background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.deleteButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(244, 67, 54, 0.4);
+}
+
+.error {
+  background: #ffebee;
+  color: #f44336;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  margin: 20px;
+}
+
+/* Responsividade */
+@media (max-width: 1024px) {
+  .header h1 {
+    font-size: 1.6em;
+  }
+  
+  .createSection h3 {
+    font-size: 1.2em;
+  }
+  
+  .guestsSection h3 {
+    font-size: 1.2em;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+  
+  .header {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .header h1 {
+    font-size: 1.8em;
+  }
+  
+  .backButton {
+    font-size: 16px;
+    padding: 12px 24px;
+  }
+  
+  .eventInfo {
+    padding: 20px;
+  }
+  
+  .eventInfo h2 {
+    font-size: 1.4em;
+  }
+  
+  .eventDetails {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .eventDetails p {
+    font-size: 16px;
+  }
+  
+  .createSection, .guestsSection {
+    padding: 20px;
+  }
+  
+  .createSection h3 {
+    font-size: 1.3em;
+  }
+  
+  .guestsSection h3 {
+    font-size: 1.3em;
+  }
+  
+  .createForm {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+  
+  .nameInput {
+    min-width: auto;
+    font-size: 16px;
+    padding: 14px 18px;
+  }
+  
+  .createButton {
+    font-size: 16px;
+    padding: 14px 28px;
+  }
+  
+  .guestCard {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    padding: 20px;
+  }
+  
+  .guestInfo h4 {
+    font-size: 1.2em;
+  }
+  
+  .guestStatus {
+    font-size: 14px;
+  }
+  
+  .guestDate {
+    font-size: 13px;
+  }
+  
+  .guestActions {
+    justify-content: center;
+    gap: 12px;
+  }
+  
+  .copyButton, .deleteButton {
+    font-size: 14px;
+    padding: 10px 20px;
+  }
+  
+  .errorMessage, .successMessage {
+    font-size: 16px;
+    padding: 18px 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 12px;
+  }
+  
+  .header {
+    padding: 16px;
+  }
+  
+  .header h1 {
+    font-size: 2em;
+  }
+  
+  .backButton {
+    font-size: 18px;
+    padding: 14px 28px;
+  }
+  
+  .eventInfo {
+    padding: 16px;
+  }
+  
+  .eventInfo h2 {
+    font-size: 1.5em;
+  }
+  
+  .eventDetails p {
+    font-size: 18px;
+  }
+  
+  .createSection, .guestsSection {
+    padding: 16px;
+  }
+  
+  .createSection h3 {
+    font-size: 1.4em;
+  }
+  
+  .guestsSection h3 {
+    font-size: 1.4em;
+  }
+  
+  .nameInput {
+    font-size: 18px;
+    padding: 16px 20px;
+  }
+  
+  .createButton {
+    font-size: 18px;
+    padding: 16px 32px;
+  }
+  
+  .guestCard {
+    padding: 24px;
+  }
+  
+  .guestInfo h4 {
+    font-size: 1.3em;
+  }
+  
+  .guestStatus {
+    font-size: 16px;
+  }
+  
+  .guestDate {
+    font-size: 14px;
+  }
+  
+  .guestActions {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .copyButton, .deleteButton {
+    font-size: 16px;
+    padding: 12px 24px;
+    width: 100%;
+  }
+  
+  .errorMessage, .successMessage {
+    font-size: 18px;
+    padding: 20px 24px;
+  }
+  
+  .emptyState {
+    padding: 40px 20px;
+    font-size: 16px;
+  }
+}
