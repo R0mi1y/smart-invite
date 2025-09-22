@@ -10,12 +10,17 @@
     "init-db": "npx tsx scripts/init-db.ts"
   },
   "dependencies": {
+    "@types/formidable": "^3.4.5",
     "@types/multer": "^2.0.0",
+    "@types/sqlite3": "^3.1.11",
+    "formidable": "^3.5.4",
     "multer": "^2.0.2",
     "mysql2": "^3.6.5",
     "next": "14.0.0",
     "react": "^18",
     "react-dom": "^18",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

@@ -1,30 +1,21 @@
-import { useState, useEffect, FormEvent, ChangeEvent, useRef } from 'react';
+import { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react';
 import { useRouter } from 'next/router';
-import styles from './styles.module.scss';
+import styles from '../../components/home/styles.module.scss';
 import React from 'react';
-import Notification from '../ui/Notification';
-import ImagePreview from '../ui/ImagePreview';
-import LoadingSpinner from '../ui/LoadingSpinner';
-import InvitePreview from '../InvitePreview';
+import Notification from '../../components/ui/Notification';
+import ImagePreview from '../../components/ui/ImagePreview';
+import LoadingSpinner from '../../components/ui/LoadingSpinner';
+import InvitePreview from '../../components/InvitePreview';
 import { useNotification } from '../../hooks/useNotification';
 import { fetchApi } from '../../helpers/generalHelper';
-
-interface Event {
-  id: number;
-  name: string;
-  description?: string;
-  message?: string;
-  photos: string[];
-  location?: string;
-  date?: string;
-}
 
 interface CustomImage {
   url: string;
   position: 'center-top' | 'center-bottom' | 'left-top' | 'left-bottom' | 'right-top' | 'right-bottom';
 }
 
-interface NewEvent {
+interface EventData {
+  id?: number;
   name: string;
   description: string;
   message: string;
@@ -34,9 +25,10 @@ interface NewEvent {
   custom_images: CustomImage[];
 }
 
-export default function HomeComponent() {
+export default function EditEvent() {
   const router = useRouter();
-  const [newEvent, setNewEvent] = useState<NewEvent>({
+  const { id } = router.query;
+  const [eventData, setEventData] = useState<EventData>({
     name: '',
     description: '',
     message: '',
@@ -45,67 +37,77 @@ export default function HomeComponent() {
     date: '',
     custom_images: []
   });
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isUploading, setIsUploading] = useState<boolean>(false);
-  const [isCreatingEvent, setIsCreatingEvent] = useState<boolean>(false);
+  const [isUpdating, setIsUpdating] = useState<boolean>(false);
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState<'basic' | 'advanced' | 'preview'>('basic');
-  const [showPreview, setShowPreview] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { notification, showSuccess, showError, showWarning, hideNotification } = useNotification();
 
-  const createEvent = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+  useEffect(() => {
+    if (id) {
+      fetchEventData();
+    }
+  }, [id]);
+
+  const fetchEventData = async (): Promise<void> => {
+    try {
+      const data = await fetchApi(`events/${id}`, { method: 'GET' });
+      setEventData({
+        ...data,
+        custom_images: data.custom_images || []
+      });
+    } catch (err) {
+      showError('Erro ao carregar evento');
+      setTimeout(() => router.push('/dashboard'), 2000);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const updateEvent = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
-    if (!newEvent.name.trim()) {
+    if (!eventData.name.trim()) {
       showError('Nome do evento é obrigatório!');
       return;
     }
 
-    if (!newEvent.date) {
+    if (!eventData.date) {
       showError('Data do evento é obrigatória!');
       return;
     }
 
-    setIsCreatingEvent(true);
+    setIsUpdating(true);
 
     try {
-      const eventData = {
-        ...newEvent,
-        photos: [...newEvent.photos, ...uploadedImages]
+      const updatedData = {
+        ...eventData,
+        photos: [...eventData.photos, ...uploadedImages]
       };
 
-      const data = await fetchApi('events', {
-        method: 'POST',
+      await fetchApi(`events/${id}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(eventData),
+        body: JSON.stringify(updatedData),
       });
 
-      showSuccess(data.message || 'Evento criado com sucesso!');
-      setNewEvent({
-        name: '',
-        description: '',
-        message: '',
-        photos: [],
-        location: '',
-        date: '',
-        custom_images: []
-      });
-      setUploadedImages([]);
-
+      showSuccess('Evento atualizado com sucesso!');
       setTimeout(() => {
-        router.push('/dashboard');
+        router.push(`/manage-invites/${id}`);
       }, 2000);
     } catch (error) {
-      showError('Erro ao criar evento');
+      showError('Erro ao atualizar evento');
     } finally {
-      setIsCreatingEvent(false);
+      setIsUpdating(false);
     }
   };
 
   const removePhoto = (index: number): void => {
-    setNewEvent(prev => ({
+    setEventData(prev => ({
       ...prev,
       photos: prev.photos.filter((_, i) => i !== index)
     }));
@@ -116,56 +118,47 @@ export default function HomeComponent() {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
-    const totalImages = uploadedImages.length + newEvent.photos.length + files.length;
+    const totalImages = eventData.photos.length + uploadedImages.length + files.length;
     if (totalImages > 20) {
-      showError('Máximo de 20 imagens por evento!');
-      return;
-    }
-
-    if (files.length > 10) {
-      showError('Máximo de 10 imagens por vez!');
+      showWarning('Máximo de 20 imagens por evento!');
       return;
     }
 
     setIsUploading(true);
-    const formData = new FormData();
-    const validFiles: File[] = [];
-
-    Array.from(files).forEach(file => {
-      if (file.size > 5 * 1024 * 1024) {
-        showError(`Arquivo ${file.name} é muito grande (máximo 5MB)`);
-        return;
-      }
-
-      if (!file.type.startsWith('image/')) {
-        showError(`Arquivo ${file.name} não é uma imagem válida`);
-        return;
-      }
-
-      validFiles.push(file);
-      formData.append('images', file);
-    });
-
-    if (validFiles.length === 0) {
-      setIsUploading(false);
-      return;
-    }
+    const newImages: string[] = [];
 
     try {
-      const data = await fetchApi('upload', {
-        method: 'POST',
-        body: formData,
-      });
+      for (let i = 0; i < Math.min(files.length, 10); i++) {
+        const file = files[i];
+        if (file.size > 5 * 1024 * 1024) {
+          showWarning(`Arquivo ${file.name} é muito grande (máx: 5MB)`);
+          continue;
+        }
 
-      setUploadedImages(prev => [...prev, ...data.images]);
-      showSuccess(data.message);
-    } catch (error) {
-      showError('Erro no upload');
-    } finally {
-      setIsUploading(false);
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const response = await fetchApi('upload', {
+          method: 'POST',
+          body: formData,
+        });
+
+        newImages.push(response.url);
+      }
+
+      setUploadedImages(prev => [...prev, ...newImages]);
+      showSuccess(`${newImages.length} imagem(ns) enviada(s)!`);
+
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
+    } catch (error) {
+      showError('Erro ao enviar imagens');
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -175,14 +168,14 @@ export default function HomeComponent() {
   };
 
   const addCustomImage = (): void => {
-    setNewEvent(prev => ({
+    setEventData(prev => ({
       ...prev,
       custom_images: [...prev.custom_images, { url: '', position: 'center-top' }]
     }));
   };
 
   const updateCustomImage = (index: number, field: 'url' | 'position', value: string): void => {
-    setNewEvent(prev => ({
+    setEventData(prev => ({
       ...prev,
       custom_images: prev.custom_images.map((img, i) => 
         i === index ? { ...img, [field]: value } : img
@@ -191,7 +184,7 @@ export default function HomeComponent() {
   };
 
   const removeCustomImage = (index: number): void => {
-    setNewEvent(prev => ({
+    setEventData(prev => ({
       ...prev,
       custom_images: prev.custom_images.filter((_, i) => i !== index)
     }));
@@ -228,26 +221,31 @@ export default function HomeComponent() {
     }
   };
 
+  const goBack = () => {
+    router.push(`/manage-invites/${id}`);
+  };
+
+  if (isLoading) {
+    return <LoadingSpinner message="Carregando evento..." overlay />;
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.mainCard}>
         <div className={styles.header}>
-          <h1 className={styles.title}>
-            🎉 Gerador de Convites
-          </h1>
-
-          <div className={styles.headerButtons}>
-            <button
-              onClick={() => router.push('/dashboard')}
-              className={`${styles.button} ${styles.dashboardButton}`}
-            >
-              📊 Dashboard
+          <div className={styles.headerLeft}>
+            <button onClick={goBack} className={styles.backButton}>
+              ← Voltar ao Gerenciamento
             </button>
           </div>
+          <h1 className={styles.title}>
+            ✏️ Editar Evento
+          </h1>
+          <div className={styles.headerRight}></div>
         </div>
 
         <div className={styles.createEventFormContainer}>
-          <h3 className={styles.createEventForm}>Criar Novo Evento</h3>
+          <h3 className={styles.createEventForm}>Editar "{eventData.name}"</h3>
           
           {/* Sistema de Abas */}
           <div className={styles.tabsContainer}>
@@ -276,7 +274,7 @@ export default function HomeComponent() {
             </div>
           </div>
 
-          <form onSubmit={createEvent}>
+          <form onSubmit={updateEvent}>
             {/* Aba de Informações Básicas */}
             {activeTab === 'basic' && (
               <div className={styles.tabContent}>
@@ -284,116 +282,116 @@ export default function HomeComponent() {
                   <input
                     type="text"
                     placeholder="Nome do Evento"
-                    value={newEvent.name}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => setNewEvent(prev => ({ ...prev, name: e.target.value }))}
+                    value={eventData.name}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setEventData(prev => ({ ...prev, name: e.target.value }))}
                     required
                     className={styles.formInput}
                   />
                 </div>
 
-            <div className={styles.formGroup}>
-              <textarea
-                placeholder="Descrição do Evento"
-                value={newEvent.description}
-                onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setNewEvent(prev => ({ ...prev, description: e.target.value }))}
-                rows={3}
-                className={styles.formTextarea}
-              />
-            </div>
-
-            <div className={styles.formGroup}>
-              <textarea
-                placeholder="Mensagem Personalizada"
-                value={newEvent.message}
-                onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setNewEvent(prev => ({ ...prev, message: e.target.value }))}
-                rows={3}
-                className={styles.formTextarea}
-              />
-            </div>
-
-            <div className={styles.formGroup}>
-              <input
-                type="text"
-                placeholder="Local do Evento"
-                value={newEvent.location}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => setNewEvent(prev => ({ ...prev, location: e.target.value }))}
-                className={styles.formInput}
-              />
-            </div>
-
-            <div className={styles.formGroup}>
-              <input
-                type="datetime-local"
-                value={newEvent.date}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => setNewEvent(prev => ({ ...prev, date: e.target.value }))}
-                className={styles.formInput}
-              />
-            </div>
-
-            <div className={styles.formGroup}>
-              <div className={styles.uploadHeader}>
-                <label className={styles.uploadLabel}>
-                  📷 Adicionar Fotos
-                </label>
-                <div className={styles.imageCounter}>
-                  {uploadedImages.length + newEvent.photos.length}/20 imagens
+                <div className={styles.formGroup}>
+                  <textarea
+                    placeholder="Descrição do Evento"
+                    value={eventData.description}
+                    onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setEventData(prev => ({ ...prev, description: e.target.value }))}
+                    rows={3}
+                    className={styles.formTextarea}
+                  />
                 </div>
-              </div>
 
-              <div className={styles.uploadSection}>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  multiple
-                  accept="image/*"
-                  onChange={handleFileUpload}
-                  className={styles.fileInput}
-                  disabled={isUploading}
-                />
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  disabled={isUploading}
-                  className={`${styles.button} ${styles.uploadButton}`}
-                >
-                  {isUploading ? '📤 Enviando...' : '📁 Escolher Arquivos'}
-                </button>
-                <small className={styles.uploadInfo}>
-                  Máx: 10 arquivos, 5MB cada, 20 total por evento
-                </small>
-              </div>
+                <div className={styles.formGroup}>
+                  <textarea
+                    placeholder="Mensagem Personalizada"
+                    value={eventData.message}
+                    onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setEventData(prev => ({ ...prev, message: e.target.value }))}
+                    rows={3}
+                    className={styles.formTextarea}
+                  />
+                </div>
 
-              {uploadedImages.length > 0 && (
-                <div className={styles.uploadedSection}>
-                  <h4>📤 Imagens Enviadas ({uploadedImages.length}):</h4>
-                  <div className={styles.photoGrid}>
-                    {uploadedImages.map((image, index) => (
-                      <ImagePreview
-                        key={`uploaded-${index}`}
-                        src={image}
-                        alt={`Upload ${index + 1}`}
-                        onRemove={() => removeUploadedImage(index)}
-                      />
-                    ))}
+                <div className={styles.formGroup}>
+                  <input
+                    type="text"
+                    placeholder="Local do Evento"
+                    value={eventData.location}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setEventData(prev => ({ ...prev, location: e.target.value }))}
+                    className={styles.formInput}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <input
+                    type="datetime-local"
+                    value={eventData.date}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setEventData(prev => ({ ...prev, date: e.target.value }))}
+                    className={styles.formInput}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <div className={styles.uploadHeader}>
+                    <label className={styles.uploadLabel}>
+                      📷 Adicionar Fotos
+                    </label>
+                    <div className={styles.imageCounter}>
+                      {uploadedImages.length + eventData.photos.length}/20 imagens
+                    </div>
                   </div>
-                </div>
-              )}
 
-              {newEvent.photos.length > 0 && (
-                <div className={styles.urlPhotosSection}>
-                  <h4>🔗 Fotos por URL ({newEvent.photos.length}):</h4>
-                  <div className={styles.photoGrid}>
-                    {newEvent.photos.map((photo, index) => (
-                      <ImagePreview
-                        key={`url-${index}`}
-                        src={photo}
-                        alt={`URL ${index + 1}`}
-                        onRemove={() => removePhoto(index)}
-                      />
-                    ))}
+                  <div className={styles.uploadSection}>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      onChange={handleFileUpload}
+                      className={styles.fileInput}
+                      disabled={isUploading}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={isUploading}
+                      className={`${styles.button} ${styles.uploadButton}`}
+                    >
+                      {isUploading ? '📤 Enviando...' : '📁 Escolher Arquivos'}
+                    </button>
+                    <small className={styles.uploadInfo}>
+                      Máx: 10 arquivos, 5MB cada, 20 total por evento
+                    </small>
                   </div>
-                </div>
-              )}
+
+                  {uploadedImages.length > 0 && (
+                    <div className={styles.uploadedSection}>
+                      <h4>📤 Imagens Enviadas ({uploadedImages.length}):</h4>
+                      <div className={styles.photoGrid}>
+                        {uploadedImages.map((image, index) => (
+                          <ImagePreview
+                            key={`uploaded-${index}`}
+                            src={image}
+                            alt={`Upload ${index + 1}`}
+                            onRemove={() => removeUploadedImage(index)}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {eventData.photos.length > 0 && (
+                    <div className={styles.urlPhotosSection}>
+                      <h4>🔗 Fotos Existentes ({eventData.photos.length}):</h4>
+                      <div className={styles.photoGrid}>
+                        {eventData.photos.map((photo, index) => (
+                          <ImagePreview
+                            key={`existing-${index}`}
+                            src={photo}
+                            alt={`Existente ${index + 1}`}
+                            onRemove={() => removePhoto(index)}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
@@ -409,7 +407,7 @@ export default function HomeComponent() {
                   </p>
                   
                   <div className={styles.customImagesContainer}>
-                    {newEvent.custom_images.map((customImg, index) => (
+                    {eventData.custom_images.map((customImg, index) => (
                       <div key={index} className={styles.customImageItem}>
                         <div className={styles.customImageInputs}>
                           <div className={styles.customImageUpload}>
@@ -481,11 +479,11 @@ export default function HomeComponent() {
                 <div className={styles.previewContainer}>
                   <h4 className={styles.sectionTitle}>👁️ Preview do Convite</h4>
                   <p className={styles.sectionDescription}>
-                    Veja como seu convite ficará antes de criar o evento.
+                    Veja como seu convite ficará após as alterações.
                   </p>
                   
                   <div className={styles.invitePreview}>
-                    <InvitePreview eventData={newEvent} uploadedImages={uploadedImages} />
+                    <InvitePreview eventData={eventData} uploadedImages={uploadedImages} />
                   </div>
                 </div>
               </div>
@@ -495,9 +493,9 @@ export default function HomeComponent() {
               <button
                 type="submit"
                 className={styles.createEventSubmitButton}
-                disabled={isCreatingEvent}
+                disabled={isUpdating}
               >
-                {isCreatingEvent ? 'Criando Evento...' : 'Criar Evento'}
+                {isUpdating ? 'Atualizando Evento...' : 'Salvar Alterações'}
               </button>
             </div>
           </form>
@@ -511,7 +509,7 @@ export default function HomeComponent() {
         onClose={hideNotification}
       />
 
-      {isCreatingEvent && <LoadingSpinner message="Criando evento..." overlay />}
+      {isUpdating && <LoadingSpinner message="Atualizando evento..." overlay />}
     </div>
   );
 }

@@ -127,6 +127,10 @@ export default function ManageInvites() {
     router.push('/dashboard');
   };
 
+  const editEvent = () => {
+    router.push(`/edit-event/${id}`);
+  };
+
   if (loading) {
     return <LoadingSpinner message="Carregando evento..." overlay />;
   }
@@ -142,10 +146,17 @@ export default function ManageInvites() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <button onClick={goBack} className={styles.backButton}>
-          ← Voltar ao Dashboard
-        </button>
+        <div className={styles.headerLeft}>
+          <button onClick={goBack} className={styles.backButton}>
+            ← Voltar ao Dashboard
+          </button>
+        </div>
         <h1>Gerenciar Convites</h1>
+        <div className={styles.headerRight}>
+          <button onClick={editEvent} className={styles.editButton}>
+            ✏️ Editar Evento
+          </button>
+        </div>
       </div>
 
       {event && (
