@@ -8,6 +8,7 @@ import LoadingSpinner from '../ui/LoadingSpinner';
 import InvitePreview from '../InvitePreview';
 import { useNotification } from '../../hooks/useNotification';
 import { fetchApi } from '../../helpers/generalHelper';
+import { safeClickElement } from '../../utils/domUtils';
 
 interface Event {
   id: number;
@@ -143,7 +144,6 @@ export default function HomeComponent() {
       }
 
       validFiles.push(file);
-      formData.append('images', file);
     });
 
     if (validFiles.length === 0) {
@@ -152,13 +152,21 @@ export default function HomeComponent() {
     }
 
     try {
-      const data = await fetchApi('upload', {
-        method: 'POST',
-        body: formData,
+      const uploadPromises = validFiles.map(async (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        return await fetchApi('upload', {
+          method: 'POST',
+          body: formData,
+        });
       });
 
-      setUploadedImages(prev => [...prev, ...data.images]);
-      showSuccess(data.message);
+      const results = await Promise.all(uploadPromises);
+      
+      const newImages = results.map((result: any) => result.url);
+      setUploadedImages(prev => [...prev, ...newImages]);
+      showSuccess(`${newImages.length} imagem${newImages.length > 1 ? 'ns' : ''} enviada${newImages.length > 1 ? 's' : ''} com sucesso!`);
     } catch (error) {
       showError('Erro no upload');
     } finally {
@@ -422,7 +430,7 @@ export default function HomeComponent() {
                             />
                             <button
                               type="button"
-                              onClick={() => document.getElementById(`custom-image-${index}`)?.click()}
+                              onClick={() => safeClickElement(`custom-image-${index}`)}
                               className={styles.uploadCustomButton}
                             >
                               📁 {customImg.url ? 'Trocar Imagem' : 'Escolher Imagem'}

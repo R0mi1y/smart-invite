@@ -5,6 +5,12 @@ import { fetchApi } from '../../helpers/generalHelper';
 import ConfettiAnimation from '../ui/ConfettiAnimation';
 import LoadingSpinner from '../ui/LoadingSpinner';
 import { useInviteCache } from '../../hooks/useInviteCache';
+import { safeWindow } from '../../utils/domUtils';
+
+interface CustomImage {
+  url: string;
+  position: 'center-top' | 'center-bottom' | 'left-top' | 'left-bottom' | 'right-top' | 'right-bottom';
+}
 
 interface InviteData {
   id: number;
@@ -20,6 +26,7 @@ interface InviteData {
   photos: string[];
   location?: string;
   date?: string;
+  custom_images?: CustomImage[];
 }
 
 interface InviteComponentProps {
@@ -48,13 +55,15 @@ export default function InviteComponent({ token }: InviteComponentProps) {
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
+      setIsMobile(safeWindow.innerWidth() <= 768);
     };
     
     checkMobile();
-    window.addEventListener('resize', checkMobile);
     
-    return () => window.removeEventListener('resize', checkMobile);
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', checkMobile);
+      return () => window.removeEventListener('resize', checkMobile);
+    }
   }, []);
 
   const fetchInvite = async (): Promise<void> => {
@@ -62,6 +71,8 @@ export default function InviteComponent({ token }: InviteComponentProps) {
       const data = await fetchApi(`invite/${token}`, {
         method: 'GET'
       });
+
+      console.log(data);
 
       setInvite(data as InviteData);
       
@@ -251,6 +262,25 @@ export default function InviteComponent({ token }: InviteComponentProps) {
       )}
       
       <div className={styles.inviteCard}>
+        {/* Imagens personalizadas */}
+        {invite?.custom_images?.map((customImg, index) => (
+          customImg.url && (
+            <div 
+              key={index}
+              className={`${styles.customImage} ${styles[customImg.position]}`}
+            >
+              <img 
+                src={customImg.url} 
+                alt={`Personalizada ${index + 1}`}
+                className={styles.customImageElement}
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = 'none';
+                }}
+              />
+            </div>
+          )
+        ))}
+        
         {/* Cabeçalho */}
         <div className={styles.inviteHeader}>
           <h1 className={styles.inviteTitle}>

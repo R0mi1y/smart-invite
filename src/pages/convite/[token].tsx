@@ -10,7 +10,6 @@ export default function Convite() {
   return (
     <>
       <Head>
-        <html lang="pt-BR" />
         <title>Convite - Smart Invite</title>
         <meta name="description" content="Seu convite personalizado" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />

@@ -8,6 +8,7 @@ import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import InvitePreview from '../../components/InvitePreview';
 import { useNotification } from '../../hooks/useNotification';
 import { fetchApi } from '../../helpers/generalHelper';
+import { safeClickElement } from '../../utils/domUtils';
 
 interface CustomImage {
   url: string;
@@ -54,8 +55,20 @@ export default function EditEvent() {
   const fetchEventData = async (): Promise<void> => {
     try {
       const data = await fetchApi(`events/${id}`, { method: 'GET' });
+      
+      // Converter data MySQL para formato datetime-local do HTML
+      let formattedDate = '';
+      if (data.date) {
+        const date = new Date(data.date);
+        if (!isNaN(date.getTime())) {
+          // Formato: YYYY-MM-DDTHH:mm
+          formattedDate = date.toISOString().slice(0, 16);
+        }
+      }
+      
       setEventData({
         ...data,
+        date: formattedDate,
         custom_images: data.custom_images || []
       });
     } catch (err) {
@@ -420,7 +433,7 @@ export default function EditEvent() {
                             />
                             <button
                               type="button"
-                              onClick={() => document.getElementById(`custom-image-${index}`)?.click()}
+                              onClick={() => safeClickElement(`custom-image-${index}`)}
                               className={styles.uploadCustomButton}
                             >
                               📁 {customImg.url ? 'Trocar Imagem' : 'Escolher Imagem'}

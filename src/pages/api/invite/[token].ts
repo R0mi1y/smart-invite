@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === 'GET') {
     const query = `
       SELECT g.*, e.name as event_name, e.description, e.message, 
-             e.photos, e.location, e.date
+             e.photos, e.location, e.date, e.custom_images
       FROM guests g
       JOIN events e ON g.event_id = e.id
       WHERE g.token = ?
