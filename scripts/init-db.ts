@@ -1,5 +1,9 @@
 // Script para inicializar o banco de dados
 import mysql from 'mysql2/promise';
+import sqlite3 from 'sqlite3';
+import { open } from 'sqlite';
+import path from 'path';
+import fs from 'fs';
 
 interface DbConfig {
   host: string;
@@ -10,6 +14,81 @@ interface DbConfig {
 }
 
 const initDatabase = async (): Promise<void> => {
+  const isProduction = process.env.NODE_ENV === 'production' || process.env.DB_HOST;
+  
+  if (isProduction) {
+    await initMySQL();
+  } else {
+    await initSQLite();
+  }
+};
+
+const initSQLite = async (): Promise<void> => {
+  console.log('🔄 Inicializando SQLite (desenvolvimento)...');
+  
+  try {
+    const dbPath = path.join(process.cwd(), 'data', 'smart-invite.db');
+    const dir = path.dirname(dbPath);
+    
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+      console.log('📁 Diretório criado:', dir);
+    }
+
+    const db = await open({
+      filename: dbPath,
+      driver: sqlite3.Database
+    });
+
+    console.log('📁 Conectado ao SQLite:', dbPath);
+
+    // Criar tabelas
+    await db.exec(`
+      CREATE TABLE IF NOT EXISTS events (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        description TEXT,
+        message TEXT,
+        photos TEXT,
+        location TEXT,
+        date TEXT,
+        custom_images TEXT,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    await db.exec(`
+      CREATE TABLE IF NOT EXISTS guests (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        event_id INTEGER,
+        name TEXT NOT NULL,
+        token TEXT UNIQUE NOT NULL,
+        confirmed INTEGER DEFAULT 0,
+        num_people INTEGER DEFAULT 0,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (event_id) REFERENCES events (id) ON DELETE CASCADE
+      )
+    `);
+
+    await db.exec(`
+      CREATE INDEX IF NOT EXISTS idx_token ON guests (token)
+    `);
+
+    console.log('✅ Tabelas SQLite criadas com sucesso');
+    
+    const tables = await db.all("SELECT name FROM sqlite_master WHERE type='table'");
+    console.log('📋 Tabelas disponíveis:', tables.map(t => t.name));
+
+    await db.close();
+    console.log('🎉 Inicialização do SQLite concluída!');
+    
+  } catch (error) {
+    console.error('❌ Erro ao inicializar SQLite:', error);
+    process.exit(1);
+  }
+};
+
+const initMySQL = async (): Promise<void> => {
   const dbConfig: DbConfig = {
     host: process.env.DB_HOST || 'mysql',
     user: process.env.DB_USER || 'root', 
@@ -18,7 +97,7 @@ const initDatabase = async (): Promise<void> => {
     port: Number(process.env.DB_PORT) || 3306
   };
 
-  console.log('🔄 Inicializando banco de dados...');
+  console.log('🔄 Inicializando MySQL (produção)...');
   console.log('📡 Conectando em:', { host: dbConfig.host, database: dbConfig.database, port: dbConfig.port });
 
   try {
@@ -69,6 +148,7 @@ const initDatabase = async (): Promise<void> => {
         photos JSON,
         location VARCHAR(500),
         date DATETIME,
+        custom_images JSON,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
@@ -87,17 +167,17 @@ const initDatabase = async (): Promise<void> => {
       )
     `);
 
-    console.log('✅ Tabelas criadas com sucesso');
+    console.log('✅ Tabelas MySQL criadas com sucesso');
     
     // Verificar tabelas
     const [tables] = await connection!.execute('SHOW TABLES');
     console.log('📋 Tabelas disponíveis:', (tables as any[]).map(t => Object.values(t)[0]));
 
     await connection!.end();
-    console.log('🎉 Inicialização do banco concluída!');
+    console.log('🎉 Inicialização do MySQL concluída!');
     
   } catch (error) {
-    console.error('❌ Erro ao inicializar banco:', error);
+    console.error('❌ Erro ao inicializar MySQL:', error);
     process.exit(1);
   }
 };
