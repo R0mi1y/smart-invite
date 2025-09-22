@@ -262,16 +262,16 @@ export default function InviteComponent({ token }: InviteComponentProps) {
       )}
       
       <div className={styles.inviteCard}>
-        {/* Imagens personalizadas */}
-        {invite?.custom_images?.map((customImg, index) => (
-          customImg.url && (
+        {/* Imagens personalizadas como papel de parede */}
+        {Array.isArray(invite?.custom_images) && invite.custom_images.map((customImg, index) => (
+          customImg?.url && (
             <div 
               key={index}
-              className={`${styles.customImage} ${styles[customImg.position]}`}
+              className={styles.customImage}
             >
               <img 
                 src={customImg.url} 
-                alt={`Personalizada ${index + 1}`}
+                alt={`Papel de parede ${index + 1}`}
                 className={styles.customImageElement}
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = 'none';

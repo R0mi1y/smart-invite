@@ -15,6 +15,7 @@ interface InviteData {
   photos?: string | string[];
   location?: string;
   date?: string;
+  custom_images?: string | any[];
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -39,7 +40,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       
       const response = {
         ...invite,
-        photos: typeof invite.photos === 'string' ? JSON.parse(invite.photos || '[]') : (invite.photos || [])
+        photos: typeof invite.photos === 'string' ? JSON.parse(invite.photos || '[]') : (invite.photos || []),
+        custom_images: typeof invite.custom_images === 'string' ? JSON.parse(invite.custom_images || '[]') : (invite.custom_images || [])
       };
       
       res.json(response);

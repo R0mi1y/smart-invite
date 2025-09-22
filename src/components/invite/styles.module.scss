@@ -121,6 +121,26 @@
   }
 }
 
+/* Imagens personalizadas como papel de parede */
+.customImage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.customImageElement {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.2;
+  filter: blur(2px);
+}
+
 .inviteCard {
   max-width: 520px;
   width: 100%;
@@ -166,8 +186,8 @@
   right: 0;
   bottom: 0;
   background: 
-    radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
+    radial-gradient(circle at 20% 80%, rgba(255,255,255, 0) 0%),
+    radial-gradient(circle at 80% 20%, rgba(255,255,255, 0) 0%);
   pointer-events: none;
 }
 
@@ -994,6 +1014,15 @@
     display: none;
   }
   
+  .customImage {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .customImageElement {
+    opacity: 0.06;
+  }
+  
   .confirmationSection {
     padding: 24px;
     margin: 32px 0;
@@ -1096,5 +1125,14 @@
   .confirmButton, .declineButton {
     padding: 10px 20px;
     font-size: 0.95em;
+  }
+  
+  .customImage {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .customImageElement {
+    opacity: 0.05;
   }
 }
