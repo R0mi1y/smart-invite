@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from './styles.module.scss';
+import { safeWindow } from '../../utils/domUtils';
 
 interface CustomImage {
   url: string;
@@ -28,13 +29,15 @@ export default function InvitePreview({ eventData, uploadedImages }: InvitePrevi
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
+      setIsMobile(safeWindow.innerWidth() <= 768);
     };
     
     checkMobile();
-    window.addEventListener('resize', checkMobile);
     
-    return () => window.removeEventListener('resize', checkMobile);
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', checkMobile);
+      return () => window.removeEventListener('resize', checkMobile);
+    }
   }, []);
 
   return (
@@ -156,10 +159,10 @@ export default function InvitePreview({ eventData, uploadedImages }: InvitePrevi
                 Confirme sua presença
               </h3>
               <div className={styles.previewButtons}>
-                <button className={styles.confirmButton}>
+                <button className={`${styles.confirmButton} ${styles.previewOnly}`} disabled>
                   Confirmar Presença 🎉
                 </button>
-                <button className={styles.declineButton}>
+                <button className={`${styles.declineButton} ${styles.previewOnly}`} disabled>
                   Não conseguirei ir 😔
                 </button>
               </div>

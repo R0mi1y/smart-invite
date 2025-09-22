@@ -4,6 +4,12 @@
   margin: 0 auto;
   transform: scale(0.8);
   transform-origin: top center;
+  pointer-events: none;
+}
+
+.previewOnly {
+  pointer-events: none !important;
+  cursor: not-allowed !important;
 }
 
 .inviteCard {

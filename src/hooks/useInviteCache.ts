@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { safeLocalStorage } from '../utils/domUtils';
 
 interface CachedInviteData {
   token: string;
@@ -19,7 +20,7 @@ export const useInviteCache = (token: string) => {
     if (!token) return;
 
     try {
-      const cached = localStorage.getItem(`${CACHE_KEY}-${token}`);
+      const cached = safeLocalStorage.getItem(`${CACHE_KEY}-${token}`);
       if (cached) {
         const data: CachedInviteData = JSON.parse(cached);
         
@@ -28,7 +29,7 @@ export const useInviteCache = (token: string) => {
           setCachedData(data);
         } else {
           // Cache expirado, remover
-          localStorage.removeItem(`${CACHE_KEY}-${token}`);
+          safeLocalStorage.removeItem(`${CACHE_KEY}-${token}`);
         }
       }
     } catch (error) {
@@ -49,7 +50,7 @@ export const useInviteCache = (token: string) => {
     };
 
     try {
-      localStorage.setItem(`${CACHE_KEY}-${token}`, JSON.stringify(data));
+      safeLocalStorage.setItem(`${CACHE_KEY}-${token}`, JSON.stringify(data));
       setCachedData(data);
     } catch (error) {
       console.error('Erro ao salvar cache:', error);
@@ -61,7 +62,7 @@ export const useInviteCache = (token: string) => {
     if (!token) return;
 
     try {
-      localStorage.removeItem(`${CACHE_KEY}-${token}`);
+      safeLocalStorage.removeItem(`${CACHE_KEY}-${token}`);
       setCachedData(null);
     } catch (error) {
       console.error('Erro ao limpar cache:', error);

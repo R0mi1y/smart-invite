@@ -46,11 +46,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { name, description, message, photos, location, date, custom_images }: Event = req.body;
     
     try {
+      // Converter data ISO para formato MySQL
+      const mysqlDate = date ? new Date(date).toISOString().slice(0, 19).replace('T', ' ') : null;
+      
       // Primeiro, tentar atualizar com custom_images
       try {
         await db.run(
           'UPDATE events SET name = ?, description = ?, message = ?, photos = ?, location = ?, date = ?, custom_images = ? WHERE id = ?',
-          [name, description, message, JSON.stringify(photos || []), location, date, JSON.stringify(custom_images || []), id]
+          [name, description, message, JSON.stringify(photos || []), location, mysqlDate, JSON.stringify(custom_images || []), id]
         );
       } catch (columnError: any) {
         // Se a coluna não existir, adicionar ela primeiro
@@ -61,7 +64,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           // Tentar novamente
           await db.run(
             'UPDATE events SET name = ?, description = ?, message = ?, photos = ?, location = ?, date = ?, custom_images = ? WHERE id = ?',
-            [name, description, message, JSON.stringify(photos || []), location, date, JSON.stringify(custom_images || []), id]
+            [name, description, message, JSON.stringify(photos || []), location, mysqlDate, JSON.stringify(custom_images || []), id]
           );
         } else {
           throw columnError;

@@ -91,7 +91,7 @@ export default function ManageInvites() {
 
   const copyInviteLink = async (token: string) => {
     const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
-    const link = `${window.location.origin}${basePath}/convite/${token}`;
+    const link = `${typeof window !== 'undefined' ? window.location.origin : ''}${basePath}/convite/${token}`;
     
     try {
       await navigator.clipboard.writeText(link);
@@ -99,6 +99,17 @@ export default function ManageInvites() {
     } catch {
       showError('Erro ao copiar', 'Não foi possível copiar o link automaticamente');
     }
+  };
+
+  const shareWhatsApp = (token: string, guestName: string) => {
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+    const link = `${typeof window !== 'undefined' ? window.location.origin : ''}${basePath}/convite/${token}`;
+    const eventName = event?.name || 'evento';
+    
+    const message = `🎉 Olá ${guestName}!\n\nVocê foi convidado para: *${eventName}*\n\nClique no link abaixo para ver seu convite personalizado:\n${link}`;
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    
+    window.open(whatsappUrl, '_blank');
   };
 
   const deleteGuest = async (guestId: number, guestName: string) => {
@@ -233,6 +244,13 @@ export default function ManageInvites() {
                       title="Copiar link do convite"
                     >
                       📋 Copiar Link
+                    </button>
+                    <button
+                      onClick={() => shareWhatsApp(guest.token, guest.name)}
+                      className={styles.whatsappButton}
+                      title="Compartilhar no WhatsApp"
+                    >
+                      📱 WhatsApp
                     </button>
                     <button
                       onClick={() => deleteGuest(guest.id, guest.name)}
