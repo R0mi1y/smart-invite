@@ -83,7 +83,7 @@ export default function InviteComponent({ token }: InviteComponentProps) {
         setNumPeople(cachedData.numPeople);
       } else {
         setConfirmed(data.confirmed);
-        setDeclined(data.confirmed === false && data.num_people === 0);
+        setDeclined(data.confirmed === false && data.num_people === -1);
         setNumPeople(data.num_people || 1);
       }
 
@@ -148,16 +148,16 @@ export default function InviteComponent({ token }: InviteComponentProps) {
         body: JSON.stringify({
           token,
           confirmed: false,
-          numPeople: 0,
+          numPeople: -1,
         }),
       });
 
       setConfirmed(false);
       setDeclined(true);
-      setNumPeople(0);
-      saveToCache(0, false, true);
+      setNumPeople(-1);
+      saveToCache(-1, false, true);
       if (invite) {
-        setInvite({ ...invite, confirmed: false, num_people: 0 });
+        setInvite({ ...invite, confirmed: false, num_people: -1 });
       }
     } catch (err) {
       setError('Erro ao recusar convite');

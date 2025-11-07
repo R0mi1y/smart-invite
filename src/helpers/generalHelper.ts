@@ -1,9 +1,12 @@
 export async function fetchApi(url: string, options: RequestInit) : Promise<any> {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_PATH || '';
-    const apiUrl = `${baseUrl}/api/${url}`;
+    const apiUrl = `/api/${url}`;
+    
+    console.log('🌐 FetchAPI - fazendo requisição para:', apiUrl);
     
     try {
         const response = await fetch(apiUrl, options);
+        
+        console.log('🌐 FetchAPI - resposta recebida:', response.status, response.statusText);
         
         if (!response.ok) {
             const errorText = await response.text();

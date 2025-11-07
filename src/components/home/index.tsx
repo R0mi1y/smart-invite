@@ -115,6 +115,7 @@ export default function HomeComponent() {
 
   const handleFileUpload = async (e: ChangeEvent<HTMLInputElement>): Promise<void> => {
     const files = e.target.files;
+    console.log('🔴 Upload iniciado - arquivos selecionados:', files?.length || 0);
     if (!files || files.length === 0) return;
 
     const totalImages = uploadedImages.length + newEvent.photos.length + files.length;
@@ -152,7 +153,10 @@ export default function HomeComponent() {
     }
 
     try {
-      const uploadPromises = validFiles.map(async (file) => {
+      console.log('🔴 Fazendo upload de', validFiles.length, 'arquivos válidos');
+      
+      const uploadPromises = validFiles.map(async (file, index) => {
+        console.log('🔴 Uploading arquivo', index + 1, ':', file.name);
         const formData = new FormData();
         formData.append('file', file);
         
@@ -163,11 +167,14 @@ export default function HomeComponent() {
       });
 
       const results = await Promise.all(uploadPromises);
+      console.log('🔴 Upload concluído - resultados:', results);
       
       const newImages = results.map((result: any) => result.url);
+      console.log('🔴 URLs das imagens:', newImages);
       setUploadedImages(prev => [...prev, ...newImages]);
       showSuccess(`${newImages.length} imagem${newImages.length > 1 ? 'ns' : ''} enviada${newImages.length > 1 ? 's' : ''} com sucesso!`);
     } catch (error) {
+      console.error('🔴 Erro no upload:', error);
       showError('Erro no upload');
     } finally {
       setIsUploading(false);

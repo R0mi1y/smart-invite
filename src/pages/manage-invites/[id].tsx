@@ -90,20 +90,39 @@ export default function ManageInvites() {
   };
 
   const copyInviteLink = async (token: string) => {
-    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
-    const link = `${typeof window !== 'undefined' ? window.location.origin : ''}${basePath}/convite/${token}`;
+    const link = `${window.location.origin}/convite/${token}`;
     
     try {
-      await navigator.clipboard.writeText(link);
-      showSuccess('Link copiado!', 'O link do convite foi copiado para a área de transferência');
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(link);
+        showSuccess('Link copiado!', 'O link do convite foi copiado para a área de transferência');
+      } else {
+        // Fallback para navegadores sem suporte ao clipboard
+        const textArea = document.createElement('textarea');
+        textArea.value = link;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        try {
+          document.execCommand('copy');
+          showSuccess('Link copiado!', 'O link do convite foi copiado para a área de transferência');
+        } catch {
+          showError('Link não copiado', `Copie manualmente: ${link}`);
+        } finally {
+          document.body.removeChild(textArea);
+        }
+      }
     } catch {
-      showError('Erro ao copiar', 'Não foi possível copiar o link automaticamente');
+      showError('Link não copiado', `Copie manualmente: ${link}`);
     }
   };
 
   const shareWhatsApp = (token: string, guestName: string) => {
-    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
-    const link = `${typeof window !== 'undefined' ? window.location.origin : ''}${basePath}/convite/${token}`;
+    const link = `${window.location.origin}/convite/${token}`;
     const eventName = event?.name || 'evento';
     
     const message = `🎉 Olá ${guestName}!\n\nVocê foi convidado para: *${eventName}*\n\nClique no link abaixo para ver seu convite personalizado:\n${link}`;
@@ -226,10 +245,18 @@ export default function ManageInvites() {
                 <div key={guest.id} className={styles.guestCard}>
                   <div className={styles.guestInfo}>
                     <h4>{guest.name}</h4>
-                    <p className={`${styles.guestStatus} ${guest.confirmed ? styles.confirmed : styles.pending}`}>
+                    <p className={`${styles.guestStatus} ${
+                      guest.confirmed 
+                        ? styles.confirmed 
+                        : guest.num_people === -1
+                          ? styles.declined
+                          : styles.pending
+                    }`}>
                       {guest.confirmed 
                         ? `✅ Confirmado - ${guest.num_people} pessoa(s)`
-                        : '⏳ Aguardando resposta'
+                        : guest.num_people === -1
+                          ? '❌ Rejeitado'
+                          : '⏳ Aguardando resposta'
                       }
                     </p>
                     <p className={styles.guestDate}>

@@ -22,6 +22,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 
+  console.log('🔵 API /upload - recebendo arquivo');
+
   try {
     const form = formidable({
       uploadDir,
@@ -33,11 +35,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     const [fields, files] = await form.parse(req);
+    console.log('🔵 API /upload - arquivo parseado:', Object.keys(files));
+    
     const file = Array.isArray(files.file) ? files.file[0] : files.file;
 
     if (!file) {
+      console.log('🔵 API /upload - ERRO: nenhum arquivo encontrado');
       return res.status(400).json({ error: 'Nenhum arquivo enviado' });
     }
+
+    console.log('🔵 API /upload - arquivo recebido:', file.originalFilename, file.size, 'bytes');
 
     // Gerar nome único para o arquivo
     const timestamp = Date.now();
@@ -50,8 +57,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     fs.renameSync(file.filepath, newFilePath);
 
     // Retornar URL relativa
-    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
-    const fileUrl = `${basePath}/uploads/${newFileName}`;
+    const fileUrl = `/uploads/${newFileName}`;
+
+    console.log('🔵 API /upload - sucesso! URL:', fileUrl);
 
     res.json({ 
       url: fileUrl,

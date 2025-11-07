@@ -12,6 +12,7 @@ interface EventWithStats {
   created_at: string;
   total_guests: number;
   confirmed_guests: number;
+  declined_guests: number;
   total_people: number;
   pending_guests: number;
 }
@@ -31,8 +32,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           e.created_at,
           COUNT(g.id) as total_guests,
           COUNT(CASE WHEN g.confirmed = 1 THEN 1 END) as confirmed_guests,
+          COUNT(CASE WHEN g.confirmed = 0 AND g.num_people = -1 THEN 1 END) as declined_guests,
           COALESCE(SUM(CASE WHEN g.confirmed = 1 THEN g.num_people ELSE 0 END), 0) as total_people,
-          COUNT(CASE WHEN g.confirmed = 0 OR g.confirmed IS NULL THEN 1 END) as pending_guests
+          COUNT(CASE WHEN g.confirmed = 0 AND g.num_people = 0 THEN 1 END) as pending_guests
         FROM events e
         LEFT JOIN guests g ON e.id = g.event_id
         GROUP BY e.id, e.name, e.description, e.message, e.photos, e.location, e.date, e.created_at

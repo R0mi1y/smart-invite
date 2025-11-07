@@ -30,14 +30,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     
     try {
       const result = await db.run(
-        'INSERT INTO guests (event_id, name, token) VALUES (?, ?, ?)',
-        [parseInt(eventId.toString()), name.trim(), token]
+        'INSERT INTO guests (event_id, name, token, confirmed, num_people) VALUES (?, ?, ?, ?, ?)',
+        [parseInt(eventId.toString()), name.trim(), token, 0, 0]
       );
       
-      const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
       const protocol = req.headers['x-forwarded-proto'] || 'https';
       const host = req.headers.host || 'localhost:3000';
-      const link = `${protocol}://${host}${basePath}/convite/${token}`;
+      const link = `${protocol}://${host}/convite/${token}`;
       
       res.json({ 
         id: result.lastID, 
@@ -52,13 +51,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   } else if (req.method === 'PUT') {
     const { token, confirmed, numPeople }: GuestUpdateRequest = req.body;
     
+    if (!token) {
+      return res.status(400).json({ error: 'Token é obrigatório' });
+    }
+    
     try {
-      await db.run(
+      const result = await db.run(
         'UPDATE guests SET confirmed = ?, num_people = ? WHERE token = ?',
         [confirmed ? 1 : 0, numPeople || 1, token]
       );
       
-      res.json({ message: 'Presença confirmada com sucesso!' });
+      if (result.changes === 0) {
+        return res.status(404).json({ error: 'Convidado não encontrado' });
+      }
+      
+      const message = confirmed ? 'Presença confirmada com sucesso!' : 'Presença recusada com sucesso!';
+      res.json({ message });
     } catch (error: any) {
       console.error('Error updating guest:', error);
       res.status(500).json({ error: error.message });

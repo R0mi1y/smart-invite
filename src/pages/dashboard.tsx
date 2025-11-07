@@ -17,6 +17,7 @@ interface EventWithStats {
   created_at: string;
   total_guests: number;
   confirmed_guests: number;
+  declined_guests: number;
   total_people: number;
   pending_guests: number;
 }
@@ -35,6 +36,7 @@ interface CompleteEventData {
   stats: {
     total_guests: number;
     confirmed_guests: number;
+    declined_guests: number;
     total_people: number;
     pending_guests: number;
   };
@@ -173,12 +175,16 @@ export default function Dashboard() {
                 <div className={styles.statLabel}>Confirmaram Presença</div>
               </div>
               <div className={styles.statCard}>
-                <div className={styles.statNumber}>{selectedEventData.stats.total_people}</div>
-                <div className={styles.statLabel}>Total de Pessoas</div>
+                <div className={styles.statNumber}>{selectedEventData.stats.declined_guests}</div>
+                <div className={styles.statLabel}>Rejeitaram Convite</div>
               </div>
               <div className={styles.statCard}>
                 <div className={styles.statNumber}>{selectedEventData.stats.pending_guests}</div>
                 <div className={styles.statLabel}>Aguardando Resposta</div>
+              </div>
+              <div className={styles.statCard}>
+                <div className={styles.statNumber}>{selectedEventData.stats.total_people}</div>
+                <div className={styles.statLabel}>Total de Pessoas</div>
               </div>
             </div>
 
@@ -194,14 +200,22 @@ export default function Dashboard() {
                   {selectedEventData.guests.map((guest) => (
                     <div
                       key={guest.id}
-                      className={`${styles.guestCard} ${guest.confirmed ? styles.confirmed : styles.pending}`}
+                      className={`${styles.guestCard} ${
+                        guest.confirmed 
+                          ? styles.confirmed 
+                          : guest.num_people === -1
+                            ? styles.declined
+                            : styles.pending
+                      }`}
                     >
                       <div className={styles.guestInfo}>
                         <h4>{guest.name}</h4>
                         <p className={styles.guestStatus}>
                           {guest.confirmed 
                             ? `✅ Confirmado - ${guest.num_people} pessoa(s)`
-                            : '⏳ Aguardando resposta'
+                            : guest.num_people === -1
+                              ? '❌ Rejeitado'
+                              : '⏳ Aguardando resposta'
                           }
                         </p>
                       </div>

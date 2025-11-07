@@ -7,8 +7,8 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   // Configuração dinâmica de prefixo baseada em variáveis de ambiente
-  basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
-  assetPrefix: process.env.NEXT_PUBLIC_ASSET_PREFIX || '',
+  basePath: '',
+  assetPrefix: '',
   // Garantir que os assets sejam servidos corretamente
   trailingSlash: false,
   // Configuração para servir arquivos estáticos

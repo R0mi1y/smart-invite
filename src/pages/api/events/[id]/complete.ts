@@ -23,6 +23,7 @@ interface CompleteEventData {
   stats: {
     total_guests: number;
     confirmed_guests: number;
+    declined_guests: number;
     total_people: number;
     pending_guests: number;
   };
@@ -42,13 +43,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const guests = await db.all('SELECT * FROM guests WHERE event_id = ? ORDER BY created_at DESC', [id]);
       
       const confirmedGuests = guests.filter((g: any) => g.confirmed);
+      const declinedGuests = guests.filter((g: any) => !g.confirmed && g.num_people === -1);
+      const pendingGuests = guests.filter((g: any) => !g.confirmed && g.num_people === 0);
       const totalPeople = confirmedGuests.reduce((sum: number, g: any) => sum + (g.num_people || 0), 0);
       
       const stats = {
         total_guests: guests.length,
         confirmed_guests: confirmedGuests.length,
+        declined_guests: declinedGuests.length,
         total_people: totalPeople,
-        pending_guests: guests.filter((g: any) => !g.confirmed).length
+        pending_guests: pendingGuests.length
       };
 
       let photos = [];

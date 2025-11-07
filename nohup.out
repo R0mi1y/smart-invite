@@ -1,0 +1,122 @@
+yarn run v1.22.22
+$ npm run init-db && next start -p 80
+npm warn Unknown env config "version-commit-hooks". This will stop working in the next major version of npm.
+npm warn Unknown env config "version-tag-prefix". This will stop working in the next major version of npm.
+npm warn Unknown env config "version-git-message". This will stop working in the next major version of npm.
+npm warn Unknown env config "argv". This will stop working in the next major version of npm.
+npm warn Unknown env config "version-git-tag". This will stop working in the next major version of npm.
+
+> smart-invite@0.1.0 init-db
+> npx tsx scripts/init-db.ts
+
+npm warn Unknown env config "version-commit-hooks". This will stop working in the next major version of npm.
+npm warn Unknown env config "version-tag-prefix". This will stop working in the next major version of npm.
+npm warn Unknown env config "version-git-message". This will stop working in the next major version of npm.
+npm warn Unknown env config "argv". This will stop working in the next major version of npm.
+npm warn Unknown env config "version-git-tag". This will stop working in the next major version of npm.
+🔄 Inicializando SQLite (desenvolvimento)...
+📁 Conectado ao SQLite: /home/romily/repositories/smart-invite/data/smart-invite.db
+✅ Tabelas SQLite criadas com sucesso
+📋 Tabelas disponíveis: [ 'events', 'sqlite_sequence', 'guests' ]
+🎉 Inicialização do SQLite concluída!
+   ▲ Next.js 14.0.0
+   - Local:        http://localhost:80
+
+ ✓ Ready in 329ms
+=== SERVE IMAGE DEBUG ===
+Requested path: [ '1762546189022_m5trezirhv.png' ]
+Filename: 1762546189022_m5trezirhv.png
+Full file path: /home/romily/repositories/smart-invite/public/uploads/1762546189022_m5trezirhv.png
+Uploads directory: /home/romily/repositories/smart-invite/public/uploads
+Uploads dir exists: true
+Uploads dir permissions: 40755
+Uploads dir UID: 0
+Uploads dir GID: 0
+Files in uploads dir: [ '1762546189022_m5trezirhv.png' ]
+File exists: true
+File size: 599770
+File permissions: 100644
+File UID: 0
+File GID: 0
+Process UID: N/A
+Process GID: N/A
+Resolved file path: /home/romily/repositories/smart-invite/public/uploads/1762546189022_m5trezirhv.png
+Resolved uploads dir: /home/romily/repositories/smart-invite/public/uploads
+Path is safe: true
+Content type: image/png
+Reading file...
+File read successfully, size: 599770
+Sending file...
+=== END SERVE IMAGE DEBUG ===
+🐬 Using MySQL database (production)
+Error creating event: Error: getaddrinfo EAI_AGAIN mysql
+    at PromisePool.execute (/home/romily/repositories/smart-invite/node_modules/mysql2/lib/promise/pool.js:54:22)
+    at MySQLAdapter.run (/home/romily/repositories/smart-invite/.next/server/chunks/936.js:1:754)
+    at handler (/home/romily/repositories/smart-invite/.next/server/pages/api/events.js:1:1056)
+    at /home/romily/repositories/smart-invite/node_modules/next/dist/compiled/next-server/pages-api.runtime.prod.js:20:16566
+    at /home/romily/repositories/smart-invite/node_modules/next/dist/server/lib/trace/tracer.js:121:36
+    at NoopContextManager.with (/home/romily/repositories/smart-invite/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7057)
+    at ContextAPI.with (/home/romily/repositories/smart-invite/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:516)
+    at NoopTracer.startActiveSpan (/home/romily/repositories/smart-invite/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18086)
+    at ProxyTracer.startActiveSpan (/home/romily/repositories/smart-invite/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18847)
+    at /home/romily/repositories/smart-invite/node_modules/next/dist/server/lib/trace/tracer.js:110:107 {
+  code: 'EAI_AGAIN',
+  errno: -3001,
+  sql: undefined,
+  sqlState: undefined,
+  sqlMessage: undefined
+}
+Error creating event: Error: getaddrinfo EAI_AGAIN mysql
+    at PromisePool.execute (/home/romily/repositories/smart-invite/node_modules/mysql2/lib/promise/pool.js:54:22)
+    at MySQLAdapter.run (/home/romily/repositories/smart-invite/.next/server/chunks/936.js:1:754)
+    at handler (/home/romily/repositories/smart-invite/.next/server/pages/api/events.js:1:1056)
+    at /home/romily/repositories/smart-invite/node_modules/next/dist/compiled/next-server/pages-api.runtime.prod.js:20:16566
+    at /home/romily/repositories/smart-invite/node_modules/next/dist/server/lib/trace/tracer.js:121:36
+    at NoopContextManager.with (/home/romily/repositories/smart-invite/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7057)
+    at ContextAPI.with (/home/romily/repositories/smart-invite/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:516)
+    at NoopTracer.startActiveSpan (/home/romily/repositories/smart-invite/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18086)
+    at ProxyTracer.startActiveSpan (/home/romily/repositories/smart-invite/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18847)
+    at /home/romily/repositories/smart-invite/node_modules/next/dist/server/lib/trace/tracer.js:110:107 {
+  code: 'EAI_AGAIN',
+  errno: -3001,
+  sql: undefined,
+  sqlState: undefined,
+  sqlMessage: undefined
+}
+yarn run v1.22.22
+$ npm run init-db && next start -p 80
+npm warn Unknown env config "version-commit-hooks". This will stop working in the next major version of npm.
+npm warn Unknown env config "version-tag-prefix". This will stop working in the next major version of npm.
+npm warn Unknown env config "version-git-message". This will stop working in the next major version of npm.
+npm warn Unknown env config "argv". This will stop working in the next major version of npm.
+npm warn Unknown env config "version-git-tag". This will stop working in the next major version of npm.
+
+> smart-invite@0.1.0 init-db
+> npx tsx scripts/init-db.ts
+
+npm warn Unknown env config "version-commit-hooks". This will stop working in the next major version of npm.
+npm warn Unknown env config "version-tag-prefix". This will stop working in the next major version of npm.
+npm warn Unknown env config "version-git-message". This will stop working in the next major version of npm.
+npm warn Unknown env config "argv". This will stop working in the next major version of npm.
+npm warn Unknown env config "version-git-tag". This will stop working in the next major version of npm.
+🔄 Inicializando SQLite (desenvolvimento)...
+📁 Conectado ao SQLite: /home/romily/repositories/smart-invite/data/smart-invite.db
+✅ Tabelas SQLite criadas com sucesso
+📋 Tabelas disponíveis: [ 'events', 'sqlite_sequence', 'guests' ]
+🎉 Inicialização do SQLite concluída!
+   ▲ Next.js 14.0.0
+   - Local:        http://localhost:80
+
+Error: ENOENT: no such file or directory, open '/home/romily/repositories/smart-invite/.next/BUILD_ID'
+    at async open (node:internal/fs/promises:642:25)
+    at async Object.readFile (node:internal/fs/promises:1279:14)
+    at async setupFsCheck (/home/romily/repositories/smart-invite/node_modules/next/dist/server/lib/router-utils/filesystem.js:144:19)
+    at async initialize (/home/romily/repositories/smart-invite/node_modules/next/dist/server/lib/router-server.js:54:23)
+    at async Server.<anonymous> (/home/romily/repositories/smart-invite/node_modules/next/dist/server/lib/start-server.js:236:36) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/romily/repositories/smart-invite/.next/BUILD_ID'
+}
+error Command failed with exit code 1.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
