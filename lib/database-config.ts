@@ -149,14 +149,14 @@ class SQLiteAdapter implements DatabaseAdapter {
 
 // Detectar ambiente e criar adapter apropriado
 function createDatabaseAdapter(): DatabaseAdapter {
-  const isProduction = process.env.NODE_ENV === 'production' || process.env.DB_HOST;
+  const useSQLite = process.env.USE_SQLITE === 'true' || process.env.NODE_ENV === 'development';
   
-  if (isProduction) {
-    console.log('🐬 Using MySQL database (production)');
-    return new MySQLAdapter();
-  } else {
+  if (useSQLite) {
     console.log('📁 Using SQLite database (development)');
     return new SQLiteAdapter();
+  } else {
+    console.log('🐬 Using MySQL database (production)');
+    return new MySQLAdapter();
   }
 }
 
