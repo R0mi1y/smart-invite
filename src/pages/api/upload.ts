@@ -55,8 +55,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Mover arquivo para o nome final
     fs.renameSync(file.filepath, newFilePath);
+    fs.chmodSync(newFilePath, 0o644);
 
-    // Retornar URL relativa
     const fileUrl = `/uploads/${newFileName}`;
 
     console.log('🔵 API /upload - sucesso! URL:', fileUrl);
